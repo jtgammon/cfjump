@@ -20,10 +20,13 @@ RUN cp -n /etc/skel/.[a-z]* .
 RUN cat /etc/apt/sources.list | sed 's/archive/us.archive/g' > /tmp/s && mv /tmp/s /etc/apt/sources.list
 
 RUN apt-get update && apt-get -y --no-install-recommends install wget curl
-RUN apt-get -y --no-install-recommends install \
+RUN apt-get -y --no-install-recommends install jq apt-utils \
            build-essential git ssh curl dnsutils golang \
            iputils-ping traceroute vim wget unzip sudo iperf \
            tcpdump nmap less netcat
+
+RUN cd /usr/local/bin && wget -O pcf-status https://github.com/jtgammon/pcf-status/blob/master/pcf-status?raw=true --no-check-certificate
+RUN chmod +x /usr/local/bin/pcf-status
 
 RUN apt-get clean && apt-get -y autoremove
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
